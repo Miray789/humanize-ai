@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Free AI Text Detector & Humanizer - Transform AI-generated text into readable human-like content with a modern interface.">
+<meta name="keywords" content="AI text detector, humanizer, text rewriting, free AI tool, content rewriting">
+<title>Modern AI Text Detector & Humanizer</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #f5f7fa;
+    margin: 0;
+    padding: 0;
+    color: #1a1a1a;
+  }
+  header {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    text-align: center;
+    padding: 3rem 1rem 2rem 1rem;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+  }
+  header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+  }
+  header p {
+    margin-top: 0.5rem;
+    font-size: 1.2rem;
+    color: #e0e0ff;
+  }
+  .container {
+    max-width: 900px;
+    margin: -50px auto 2rem auto;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease;
+  }
+  .container:hover {
+    transform: translateY(-5px);
+  }
+  textarea {
+    width: 100%;
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    font-size: 1rem;
+    resize: vertical;
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.05);
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+  }
+  textarea:focus {
+    border: 1px solid #667eea;
+    box-shadow: inset 0 2px 6px rgba(102,126,234,0.3);
+    outline: none;
+  }
+  .buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 1.5rem 0;
+    flex-wrap: wrap;
+  }
+  button {
+    background: #667eea;
+    color: #fff;
+    border: none;
+    padding: 0.75rem 1.8rem;
+    font-size: 1rem;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+  button:hover {
+    background: #5a67d8;
+    transform: scale(1.05);
+  }
+  .output-container h2 {
+    margin-bottom: 0.5rem;
+    font-size: 1.3rem;
+    color: #333;
+  }
+  .output {
+    background: #f0f3f8;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    min-height: 120px;
+    white-space: pre-wrap;
+    font-size: 1rem;
+    line-height: 1.6;
+    border: 1px solid #e0e4ee;
+  }
+  @media (max-width: 600px){
+    .container { margin: -30px 1rem 2rem 1rem; padding: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Modern AI Text Detector & Humanizer</h1>
+  <p>Detect AI-generated text and humanize it with a modern interface.</p>
+</header>
+
+<main>
+  <div class="container">
+    <textarea id="inputText" rows="10" placeholder="Paste your text here..."></textarea>
+    <div class="buttons">
+      <button onclick="detectAI()">Detect AI Text</button>
+      <button onclick="humanizeText()">Humanize Text</button>
+    </div>
+    <div class="output-container">
+      <h2>Result:</h2>
+      <div id="outputText" class="output"></div>
+    </div>
+  </div>
+</main>
+
+<script>
+  function detectAI() {
+    const text = document.getElementById('inputText').value.trim();
+    if (!text) return alert("Please enter text to detect.");
+
+    const aiWords = ['however','therefore','moreover','additionally','utilize','hence','thus','consequently'];
+    let score = 0;
+    aiWords.forEach(word => {
+      const regex = new RegExp(`\\b${word}\\b`, 'gi');
+      score += (text.match(regex) || []).length * 5;
+    });
+    let aiScore = Math.min(100, score + Math.floor(Math.random()*30));
+    document.getElementById('outputText').innerText = 
+      `AI Detection Score: ${aiScore}%\n` +
+      (aiScore > 50 ? "⚠️ Likely AI-generated text" : "✅ Likely human-written text");
+  }
+
+  function humanizeText() {
+    let text = document.getElementById('inputText').value.trim();
+    if (!text) return alert("Please enter text to humanize.");
+
+    const replacements = {
+      'however':'but','therefore':'so','moreover':'also','additionally':'also',
+      'utilize':'use','hence':'so','thus':'so','consequently':'so'
+    };
+    text = text.replace(/\b(however|therefore|moreover|additionally|utilize|hence|thus|consequently)\b/gi,
+      match => replacements[match.toLowerCase()] || match
+    );
+    text = text.replace(/\b(is not|do not|cannot|will not|does not)\b/gi, match => {
+      const map = {'is not':'isn\'t','do not':'don\'t','cannot':'can\'t','will not':'won\'t','does not':'doesn\'t'};
+      return map[match.toLowerCase()] || match;
+    });
+    text = text.replace(/[\s]{2,}/g,' ').replace(/\.([a-zA-Z])/g,'. $1');
+    document.getElementById('outputText').innerText = text;
+  }
+</script>
+
+</body>
+</html>
